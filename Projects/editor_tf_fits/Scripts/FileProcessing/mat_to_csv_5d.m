@@ -1,4 +1,5 @@
 % transfer matfile format -> csv for ML processing
+% prob wiping this cuz just use scipy on python end 
 
 projectdata = './Projects/editor_tf_fits/Data';
 exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2';
@@ -13,7 +14,6 @@ csv_output_path = fullfile(projectdata, 'Processed/tntcsv',['tnt_preprocessed_da
 data = load(outpath);
 
 % Assuming the primary data is stored in a variable called 'datafft_combined'
-% Adjust this according to the actual variable name in your MAT-file
 if isfield(data, 'datafft_combined')
     data_array = data.datafft_combined;
 else
@@ -24,8 +24,7 @@ end
 [ncol, nlin, nslc, Nc, n2d] = size(data_array);
 
 % Reshape the data into a 2D array
-% Flatten all dimensions except the first two, so that each row represents a single data point
-reshaped_data = reshape(data_array, ncol * nlin * nslc * Nc * n2d, []);
+reshaped_data = reshape(data_array, [], ncol * nlin * nslc * Nc * n2d);
 
 % Create a table from the reshaped data
 data_table = array2table(reshaped_data);

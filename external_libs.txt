@@ -1,0 +1,7 @@
+Libraries that are not committed with the git (last updated Aug 6 2024) 
+
+Common/Helpers/matlab_basic_functions = processing funcs that clarissa uses 
+Common/Helpers/wavelet-coherence-master = wavelet analysis for EMI coils
+Projects/bm4d = image smoothing algorithm using weiner filter and block matching
+
+

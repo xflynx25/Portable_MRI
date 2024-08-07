@@ -1,0 +1,122 @@
+%% File paths and parameters
+clear all;
+close all; 
+
+projectdata = './Projects/editor_tf_fits/Data';
+outpath = fullfile(projectdata, 'Processed/tnt','tnt_preprocessed_data_FORMATTED.mat'); % potentially bad due to the non-linear slice nature
+%outpath = fullfile(projectdata, 'Processed/sai_data_example_3d.mat');
+
+% 128 x 128 x 2 x 4
+outpath = fullfile(projectdata, 'Processed/Cameleon/8642_FORMATTED_3d.mat');
+%outpath = fullfile(projectdata, 'Processed/tnt','tnt_preprocessed_data_FORMATTED.mat'); % potentially bad due to the non-linear slice nature
+
+%outpath = fullfile(projectdata, 'Processed/sai_data_example_3d.mat');
+
+
+% good filepaths 
+dataFilePath = fullfile(projectdata, 'Processed/sai_data_example_3d.mat');
+dataFilePath = fullfile(projectdata, 'Processed/Cameleon/8598_FORMATTED_3d.mat');
+%dataFilePath = fullfile(projectdata, 'Processed/tnt','tnt_preprocessed_data_FORMATTED.mat');
+outpath = dataFilePath; 
+
+outpath = fullfile(projectdata, 'Processed/homogenous_scanner/bluestoneFirst.mat');
+
+% getting the name from the tnt
+exp_name = 'zgrad_40gain_4coil_4avg_run1';
+outpath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
+
+% public computer 
+exp_name = '2Dsequence_2Dtable_averaging_singleecho_trigearly_4rx_1repeat_260_gain60_ball_day2trial2';
+outpath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
+%outpath = fullfile(projectdata, 'Processed/sai_data_example_3d.mat');
+
+%% Parameters 
+only_one_echo = 1;%1; 
+LINE_TO_PLOT_ECHO = 10; 
+SLICE_TO_PLOT_ECHO = 11; 
+SLICE_TO_PLOT_HISTOGRAM = 11; 
+SNR_SLICE = 12;
+PLOT_SLICE_NUM_ROWS = 3; 
+HISTOGRAM_MINBINSIZE_FOR_PLOT = 5; 
+
+Z_ACQUISITION_METHOD = 'cartesian'; 'phaseslice'; 
+
+% SINGLETON Parameters
+LINE_TO_PLOT_ECHO = 1; 
+SLICE_TO_PLOT_ECHO = 1; 
+SLICE_TO_PLOT_HISTOGRAM = 1; 
+SNR_SLICE = 1;
+PLOT_SLICE_NUM_ROWS = 4; 
+
+% default params
+noisecal = 1;
+usephasecorrection = 0;
+EMIacq = 1;
+snrcalc = 1;
+plot3d = 0; 
+kspaceplots = 1; 
+plot_histograms = 0; 
+
+
+%% Data exploration and visualization
+
+% Extract primary data and EMI data
+coil_data = load(outpath);
+combined_data = coil_data.datafft_combined; 
+
+% line plot of an echo
+plot_single_echo_alldetectors(combined_data, LINE_TO_PLOT_ECHO, SLICE_TO_PLOT_ECHO);
+
+
+% Histograms, ksp and image, logscale and absolute, and then if we
+% standardize the x and y 
+if only_one_echo == 1
+    combined_data = cat(4, combined_data, combined_data);
+    combined_data = permute(combined_data, [1 2 4 3]);
+end 
+slice_data = squeeze(combined_data(:, :, SLICE_TO_PLOT_HISTOGRAM, :)); 
+slice_data_name = strcat('MRI Data Slice', string(SLICE_TO_PLOT_HISTOGRAM));
+
+%{
+%plot_histograms_2d(slice_data, slice_data_name, false, false);
+%plot_histograms_2d(slice_data, slice_data_name, false, true);
+%plot_histograms_2d(slice_data, slice_data_name, true, false);
+%plot_histograms_2d(slice_data, slice_data_name, true, true);
+%}
+if plot_histograms == 1
+    hmbs = HISTOGRAM_MINBINSIZE_FOR_PLOT; 
+    plot_histograms_2d(slice_data, slice_data_name, false, false, true, hmbs);
+    plot_histograms_2d(slice_data, slice_data_name, false, true, true ,hmbs);
+    plot_histograms_2d(slice_data, slice_data_name, true, false, true, hmbs);
+    plot_histograms_2d(slice_data, slice_data_name, true, true, true, hmbs);
+end
+
+% Plot sliders for kspace and image space (with emi mitigation)
+plot_kspace_slider(combined_data, PLOT_SLICE_NUM_ROWS, true, 0);
+plot_emi_mitigation_slider_emiseperate(combined_data, PLOT_SLICE_NUM_ROWS, Z_ACQUISITION_METHOD, true, 0); %normal plot
+%plot_emi_mitigation_slider_emiseperate(combined_data, PLOT_SLICE_NUM_ROWS, Z_ACQUISITION_METHOD, true, .5); %clim plot
+plot_emi_mitigation_slider_emiseperate_ksp(combined_data, PLOT_SLICE_NUM_ROWS, Z_ACQUISITION_METHOD, true, 1); %deep log plot
+plot_emi_mitigation_slider_emiseperate(combined_data, PLOT_SLICE_NUM_ROWS, Z_ACQUISITION_METHOD, true, 2); %shallow log plot
+%plot_emi_mitigation_slider_emiseperate(combined_data, PLOT_SLICE_NUM_ROWS, Z_ACQUISITION_METHOD, true, 10); %deep log plot
+
+% 3D plot if enabled
+if plot3d == 1
+    primary_data = combined_data(:, :, :, 1);
+    img_data = do_3d_ifft(primary_data, Z_ACQUISITION_METHOD);
+
+    plot_3d_reconstruction_slices(img_data, false, 0);
+    %plot_3d_reconstruction_slices(img_data, false, 0.75);
+    %plot_3d_reconstruction_slices(img_data, false, 2);
+    plot_3d_reconstruction_slices(img_data, false, 5);
+end
+
+% Perform SNR calculation if enabled
+if snrcalc == 1
+    % for raw
+    primary_data = combined_data(:, :, :, 1);
+    calculate_snr_3d(primary_data, SNR_SLICE);
+
+    % for editor image 
+    [I3D_Editer, corrected_ksp_3d] = Editer_3d_transform(combined_data, slice_type); 
+
+end

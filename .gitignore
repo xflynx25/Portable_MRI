@@ -1,0 +1,18 @@
+# Ignore node_modules directory
+node_modules/
+
+# Ignore log files
+*.log
+
+# Ignore .env files
+.env
+
+# Ignore other repos
+Projects/editor_tf_fits/Data/Raw/EDITER_LowfieldMRI/
+Common/Helpers/matlab_basic_functions/
+to_be_organized/
+Common/Helpers/wavelet-coherence-master/
+Projects/bm4d/
+
+# Ignore data files (large)
+Projects/*/Data/

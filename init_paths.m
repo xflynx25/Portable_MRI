@@ -33,6 +33,7 @@ function init_paths(projectName)
     addpath(fullfile(commonDir, 'Helpers', 'matlab_basic_functions'));
     addpath(fullfile(commonDir, 'Helpers', 'john_helpers'));
     addpath(fullfile(commonDir, 'Helpers', 'matlab_basic_functions', 'ReadData'));
+    addpath(fullfile(commonDir, 'Helpers', 'wavelet-coherence-master'));
 
     % Adding project-specific paths
     addpath(fullfile(projectDir, 'Scripts', 'FileProcessing'));

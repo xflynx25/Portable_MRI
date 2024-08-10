@@ -1,0 +1,34 @@
+
+projectdata = './Projects/editor_tf_fits/Data';
+exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2'; 
+%exp_name = 'builtin_averages';
+outpath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
+
+cd = load(outpath);
+coil_data = cd.datafft_combined; 
+mr_sequence = coil_data(:, :, :, :, 2); 
+mr_plane = squeeze(mr_sequence(:, :, SNR_SLICE, :)); 
+
+NUM_DETECTORS = 4;
+size(mr_plane)
+
+
+figure('color',[1 1 1])
+%tlim=[min(d1(1,1),d2(1,1)) max(d1(end,1),d2(end,1))];
+
+subplot(2,2,1);
+wt(mr_plane(:, :, 1));
+title('primary');
+%set(gca,'xlim',tlim);
+
+subplot(2,2,2)
+wt(mr_plane(:, :, 2))
+title('emi 1')
+
+subplot(2,2,3)
+wt(mr_plane(:, :, 3))
+title('emi 2')
+
+subplot(2,2,4)
+wt(mr_plane(:, :, 4))
+title('emi 3')

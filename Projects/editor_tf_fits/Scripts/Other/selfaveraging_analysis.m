@@ -63,6 +63,7 @@ plot_histograms = 0;
 
 NUM_ACQUISITIONS = 2;
 PLOT_SCALE = 2; 
+EDITER_CALIBRATION_ON = 1; 
 
 
 %% Data exploration and visualization
@@ -134,6 +135,14 @@ if snrcalc == 1
     % Plot average editor K-space data
     subplot(1, 3, 3);
     plot_with_scale(individual, 'Individual Method', true, PLOT_SCALE);
+
+
+end
+
+% use the model trained on the calibration to do inference on the MR
+% acquisition (requires editer file to be split and return the params)
+if EDITER_CALIBRATION_ON == 1
+    [I3D_Editer, corrected_ksp_3d] = Editer_3d_transform(raw_combined, Z_ACQUISITION_METHOD); 
 
 
 end

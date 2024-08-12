@@ -1,4 +1,4 @@
-function [kern_stack, win_stack, ksz_col, ksz_lin] = training_editer2d(combined_data, varargin)
+function [kern_stack, win_stack, ksz_col, ksz_lin] = training_editer2d(combined_data)
     % Training function to find the kernel and parameters
     
     % User setup

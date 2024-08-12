@@ -1,10 +1,21 @@
 import numpy as np
 from scipy.io import loadmat
 
+
+# INPUTS 
+##################
+
+exp_name = 'tnt_preprocessed_data_2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2'
+
+
+##################
+##################
+##################
+##################
+
 # Define the MATLAB input path and the output path for the NumPy object
 inp_proj_folder = './Projects/editor_tf_fits/Data/Processed/tnt/'
 outp_proj_folder = './Projects/editor_tf_fits/Data/Processed/tntnp/'
-exp_name = 'tnt_preprocessed_data_2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2'
 mat_input_path = f'{inp_proj_folder}{exp_name}_FORMATTED.mat'
 numpy_output_path = f'{outp_proj_folder}{exp_name}_FORMATTED.npy'
 

@@ -8,9 +8,9 @@
 % HYPERPARAMETERS
 SLICE = 1; 
 AVERAGE_NUMBER_FOR_INITIALVIS = 1; 
-INITIAL_PLOT = 0; 
+INITIAL_PLOT = 1; 
 KSPACE_SCALE = 1; 
-IMAGE_SCALE = 0; 
+IMAGE_SCALE = 2; 
 OLD_EDITER_ON = 0; 
 close all; 
 
@@ -78,53 +78,49 @@ W = 1; %number of PE per initial window
 ksz_col_initial = 0; 
 ksz_lin_initial = 0; 
 correlation_eps = 5e-1; % Default value
-ksz_col_final = 7; 
+ksz_col_final = 5; 
 ksz_lin_final = 0; 
 
 combined_data = cd;
 starter_kernels = devediter_initialfits(combined_data, W, ksz_col_initial, ksz_lin_initial);
 win_stack = devediter_correlationstage(combined_data, starter_kernels, correlation_eps);
 [kern_stack, win_stack, ksz_col, ksz_lin] = devediter_finalkernels(combined_data, win_stack, ksz_col_final, ksz_lin_final);
-[corrected_img_dev, corrected_ksp_dev] = inference_editer2d(combined_data, kern_stack, win_stack, ksz_col, ksz_lin);
+[corrected_img, corrected_ksp] = inference_editer2d(combined_data, kern_stack, win_stack, ksz_col, ksz_lin);
+
+figure; 
+plot_with_scale(abs(corrected_img), 'raw image', true, IMAGE_SCALE);
 
 
 
+if OLD_EDITER_ON == 1 
+    calibration = calib_d; 
+    mr_acquisition = cd; 
 
-% PLOTTING THE COMPARISONS
-calibration = calib_d; 
-mr_acquisition = cd; 
+    [kern_stack, win_stack, ksz_col, ksz_lin] = training_editer2d(calibration);
+    [corrected_img_calibration, corrected_ksp_calibration] = inference_editer2d(mr_acquisition, kern_stack, win_stack, ksz_col, ksz_lin);
 
-[kern_stack, win_stack, ksz_col, ksz_lin] = training_editer2d(calibration);
-[corrected_img_calibration, corrected_ksp_calibration] = inference_editer2d(mr_acquisition, kern_stack, win_stack, ksz_col, ksz_lin);
+    % compare 
+    figure;
+    subplot(1, 3, 1);
+    rawifft = ifftshift(ifft2(ifftshift(ksp_primary)));
+    plot_with_scale(abs(rawifft), 'raw image', true, IMAGE_SCALE);
 
-% compare 
-figure;
-subplot(1, 4, 1);
-rawifft = ifftshift(ifft2(ifftshift(ksp_primary)));
-plot_with_scale(abs(rawifft), 'raw image', true, IMAGE_SCALE);
+    subplot(1, 3, 2);
+    plot_with_scale(abs(corrected_img_calibration), 'editer calib repeat on self', true, IMAGE_SCALE);
 
-subplot(1, 4, 2);
-plot_with_scale(abs(corrected_img_calibration), 'editer calib repeat on self', true, IMAGE_SCALE);
-
-[I3D_Editer, corrected_ksp_3d] = Editer_2d_transform(mr_acquisition); 
-subplot(1, 4, 3);
-plot_with_scale(abs(I3D_Editer), 'Real Editer', true, IMAGE_SCALE);
-
-subplot(1, 4, 4);
-plot_with_scale(abs(corrected_img_dev), 'current editer', true, IMAGE_SCALE);
+    [I3D_Editer, corrected_ksp_3d] = Editer_2d_transform(mr_acquisition); 
+    subplot(1, 3, 3);
+    plot_with_scale(abs(I3D_Editer), 'Real Editer', true, IMAGE_SCALE);
 
 
 
-% SNRs, send in the primary
-disp('raw')
-calculate_snr_saving2d(ksp_primary, true);
+    % SNRs, send in the primary
+    disp('raw')
+    calculate_snr_saving2d(ksp_primary, true);
 
-disp('typical editer')
-calculate_snr_saving2d(corrected_ksp_3d(:, :, 1), true);
+    disp('typical editer')
+    calculate_snr_saving2d(corrected_ksp_3d(:, :, 1), true);
 
-disp('calibration editer')
-calculate_snr_saving2d(corrected_ksp_calibration(:, :, 1), true);
-
-disp('dev editer')
-calculate_snr_saving2d(corrected_ksp_dev(:, :, 1), true);
-
+    disp('calibration editer')
+    calculate_snr_saving2d(corrected_ksp_calibration(:, :, 1), true);
+end

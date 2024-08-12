@@ -189,18 +189,23 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
             %uncorrected_img = ifftshift(ifft2(ifftshift(primary_coil)));
 
             % 1. raw values
-            plot_simple_editer(combined_data(:, :, 1), corrected_img, x_range, y_range)
+            %plot_simple_editer(combined_data(:, :, 1), corrected_img, x_range, y_range)
             % 2. adjusted to be a square
-            plot_editer_advanced(uncorrected_img, corrected_img, 0, x_range, y_range, daspect)
-            plot_editer_advanced(uncorrected_img, corrected_img, .5, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_img, corrected_img, 0, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_img, corrected_img, .5, x_range, y_range, daspect)
             % 3. square, on logarithmic scale
-            plot_editer_advanced(uncorrected_img, corrected_img, 1, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_img, corrected_img, 2, x_range, y_range, daspect)
             % 4. square, on multi logarithmic scale
-            plot_editer_advanced(uncorrected_img, corrected_img, 8, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_img, corrected_img, 8, x_range, y_range, daspect)
             % 5. we can plot the kspace too
-            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 0, x_range, y_range, daspect)
-            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 1, x_range, y_range, daspect)
-            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 8, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_ksp, corrected_ksp, 0, x_range, y_range, daspect)
+            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 2, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_ksp, corrected_ksp, 8, x_range, y_range, daspect)
+
+
+            % custom choosing which
+            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 2, x_range, y_range, daspect)
+            plot_editer_advanced(uncorrected_img, corrected_img, 2, x_range, y_range, daspect)
         end
     end
 

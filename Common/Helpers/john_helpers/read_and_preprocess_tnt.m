@@ -1,4 +1,4 @@
-function read_and_preprocess_tnt(raw_data_path, outpath, Nc, Necho, Nro, Nbuffer, N2d, Nrepeats, Primary_Coil_Number)
+function read_and_preprocess_tnt(raw_data_path, outpath, Nc, Necho, Nro, Nbuffer, N2d, Primary_Coil_Number)
                                 
     % Read Tecmag data
     [Ms1, ~, ~] = Read_Tecmag(raw_data_path);
@@ -8,7 +8,7 @@ function read_and_preprocess_tnt(raw_data_path, outpath, Nc, Necho, Nro, Nbuffer
 
     % Reshape and reorder data
     % Navg will be in the 2d dimension, should go to the end as if 4d
-    temp3 = reshape(Ms1, Nro, Necho * Nc, N2d, Nrepeats, '');
+    temp3 = reshape(Ms1, Nro, Necho * Nc, N2d,'');
     temp = permute(temp3,[ 1 4 2 3]);   %% index 1 is coil #, 2 is RO, 3 is PE, 4 is average #
 
     %Ms_reorder_pos = tntreshape(Ms1, Nro, Necho * Nc); 

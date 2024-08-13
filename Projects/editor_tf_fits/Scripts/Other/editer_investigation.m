@@ -24,11 +24,11 @@ dataFilePath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', 
 exp_name = 'fulldataset_CCmode_noFilter_halbachcylinder_paperphantom_4Rx_singlegpa65_8avg_run1'; %'zgrad_40gain_4coil_4avg_run1';
 dataFilePath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
 
-exp_name = '2Dsequence_2Dtable_averaging_singleecho_trigearly_4rx_4repeat_260_gain60_ball_5th_trial1';
+%exp_name = '2Dsequence_2Dtable_averaging_singleecho_trigearly_4rx_4repeat_260_gain60_ball_5th_trial1';
 %exp_name = 'builtin_averages';
 %exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2';
-exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2';
-dataFilePath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
+%exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2';
+%dataFilePath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
 AVERAGING = 0; 
 
 % LOADING DATA AND PROCESSING INTO SINGLE SLICE (cd) coil data
@@ -75,17 +75,18 @@ end
 
 % RUN EDITER, WITH CERTAIN PARAMS AND VISUALIZATIONS
 W = 1; %number of PE per initial window
-ksz_col_initial = 0; 
+ksz_col_initial = 3; 
 ksz_lin_initial = 0; 
-correlation_eps = 5e-1; % Default value
+correlation_eps = 5e-2; 
 ksz_col_final = 7; 
 ksz_lin_final = 0; 
 
 combined_data = cd;
-starter_kernels = devediter_initialfits(combined_data, W, ksz_col_initial, ksz_lin_initial);
-win_stack = devediter_correlationstage(combined_data, starter_kernels, correlation_eps);
+starter_kern_stack = devediter_initialfits(combined_data, W, ksz_col_initial, ksz_lin_initial);
+win_stack = devediter_correlationstage(combined_data, starter_kern_stack, correlation_eps);
 [kern_stack, win_stack, ksz_col, ksz_lin] = devediter_finalkernels(combined_data, win_stack, ksz_col_final, ksz_lin_final);
-[corrected_img_dev, corrected_ksp_dev] = inference_editer2d(combined_data, kern_stack, win_stack, ksz_col, ksz_lin);
+%[corrected_img_dev, corrected_ksp_dev] = inference_editer2d(combined_data, kern_stack, win_stack, ksz_col, ksz_lin);
+[corrected_img_dev, corrected_ksp_dev] = devediter_inference(combined_data, kern_stack, win_stack, ksz_col, ksz_lin);
 
 
 
@@ -117,7 +118,7 @@ plot_with_scale(abs(corrected_img_dev), 'current editer', true, IMAGE_SCALE);
 
 % SNRs, send in the primary
 disp('raw')
-calculate_snr_saving2d(ksp_primary, true);
+calculate_snr_saving2d(ksp_primary, false);
 
 disp('typical editer')
 calculate_snr_saving2d(corrected_ksp_3d(:, :, 1), true);

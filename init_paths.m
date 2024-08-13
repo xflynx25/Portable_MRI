@@ -12,6 +12,7 @@ function init_paths(projectName)
     folders = {
         fullfile(projectDir, 'Data', 'Raw')
         fullfile(projectDir, 'Data', 'Processed')
+        fullfile(projectDir, 'Data', 'Processed', 'tnt')
         fullfile(projectDir, 'Scripts', 'FileProcessing')
         fullfile(projectDir, 'Scripts', 'Other')
         fullfile(projectDir, 'Results')
@@ -41,6 +42,7 @@ function init_paths(projectName)
 
     % Add data and results directories if needed
     addpath(fullfile(projectDir, 'Data', 'Raw'));
+    addpath(fullfile(projectDir, 'Data', 'Processed'));
     addpath(fullfile(projectDir, 'Data', 'Processed'));
     addpath(fullfile(projectDir, 'Results'));
 

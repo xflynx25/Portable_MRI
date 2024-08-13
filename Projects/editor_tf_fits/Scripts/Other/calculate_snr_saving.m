@@ -1,4 +1,4 @@
-function calculate_snr_saving(coil_data, snrslice, use_saved_coords)
+function [SNR] = calculate_snr_saving(coil_data, snrslice, use_saved_coords)
     coords_filename = '/Users/jflyn/Documents/martinos_docs_windows/Projects/editor_tf_fits/Scripts/Other/snr_coords.mat';
 
     % Perform FFT for visuals and selection

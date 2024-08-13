@@ -1,4 +1,4 @@
-function [win_stack] = devediter_correlationstage(combined_data, starter_kernels, correlation_eps)
+function [win_stack] = devediter_correlationstage(combined_data, starter_kern_stack, correlation_eps)
     % Phase 2: find proper PE groupings
     % TODO: figure out what's going on with the max find commmand and
     % correct
@@ -10,11 +10,13 @@ function [win_stack] = devediter_correlationstage(combined_data, starter_kernels
     % variables we need to recompute
     ncol = size(combined_data, 1);
     nlin = size(combined_data, 2);
-    
+
     % Normalize kernels and compute correlation matrix
-    kern_pe_normalized = zeros(size(starter_kernels));
+    num_groups = size(starter_kern_stack, 1); 
+    size_kernel = size(starter_kern_stack{1}, 1);
+    kern_pe_normalized = zeros(size_kernel, num_groups);
     for clin = 1:nlin
-        kern_pe_normalized(:, clin) = starter_kernels(:, clin) / norm(starter_kernels(:, clin));
+        kern_pe_normalized(:, clin) = starter_kern_stack{clin} / norm(starter_kern_stack{clin});
     end
     kcor = kern_pe_normalized' * kern_pe_normalized;
     
@@ -36,4 +38,5 @@ function [win_stack] = devediter_correlationstage(combined_data, starter_kernels
     
     % Drop the empty last entry 
     win_stack = win_stack(1:cwin - 1);
+    disp(win_stack)
 end 

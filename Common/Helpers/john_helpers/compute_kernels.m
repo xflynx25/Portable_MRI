@@ -1,4 +1,4 @@
-function [kern_stack] = compute_kernels(combined_data, win_stack, ksz_col ksz_lin)
+function [kern_stack] = compute_kernels(combined_data, win_stack, ksz_col, ksz_lin)
 
     Nc = size(combined_data, 3) - 1;  % Number of noise detectors
     kern_stack = cell(length(win_stack), 1);
@@ -6,12 +6,14 @@ function [kern_stack] = compute_kernels(combined_data, win_stack, ksz_col ksz_li
 
     for cwin = 1:length(win_stack)
         noise_mat = [];
-        pe_rng = win_stack{cwin};
+        pe_rng = win_stack{cwin}; % list (or single) of lines that are grouped
+        min_pe = min(pe_rng);
+        max_pe = max(pe_rng);
 
         % Pad arrays for each detector
         paddedData = cell(Nc, 1);
         for d = 1:Nc
-            paddedData{d} = padarray(combined_data(:, pe_rng, d + 1), [ksz_col ksz_lin]);
+            paddedData{d} = padded_combined_data(:, min_pe:max_pe+2*ksz_lin, d+1); 
         end
 
         % Construct noise matrix

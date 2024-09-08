@@ -29,21 +29,28 @@ function init_paths(expName)
     end
 
     % Adding common paths
-    addpath(genpath(commonDir));
+    addpath(fullfile(commonDir, 'Scripts'));
+    addpath(fullfile(commonDir, 'Scripts/Plotting'));
+    addpath(fullfile(commonDir, 'Helpers'));
+    addpath(fullfile(commonDir, 'Helpers', 'matlab_basic_functions'));
+    addpath(fullfile(commonDir, 'Helpers', 'john_helpers'));
+    addpath(fullfile(commonDir, 'Helpers', 'matlab_basic_functions', 'ReadData'));
+    addpath(fullfile(commonDir, 'Helpers', 'wavelet-coherence-master'));
 
     % Adding project-specific paths
-    addpath(fullfile(expDir, 'Scripts'));
+    addpath(fullfile(projectDir, 'Scripts', 'FileProcessing'));
+    addpath(fullfile(projectDir, 'Scripts', 'Other'));
 
     % don't want to add data paths because might be name degeneracies
+    addpath(fullfile(projectDir, 'Results'));
 
     % set other useful global variables 
     resultsDir = fullfile(expDir, 'Results');
+
     rawDataDir = fullfile(rootDir, 'Data', 'Raw');
     procDataDir = fullfile(rootDir, 'Data', 'Processed');
-
+    resultsDir = '/Users/jflyn/Documents/martinos_docs_windows';
     assignin('base', 'resultsDir', resultsDir);
-    assignin('base', 'rawDataDir', rawDataDir);
-    assignin('base', 'procDataDir', procDataDir);
 
 
     % Save the path for the current session

@@ -1,0 +1,15 @@
+Designed to be simple. 
+
+Call init_paths()....
+
+Open a folder for a experiment, some data analysis tasks that make some coherent idea in your mind. 
+The goal of this is just to keep the scripts organized. Clone an existing folder if you want something similar to before. 
+
+Then script away, and utilize the wide library of functions in the Common directory. 
+
+When you acquire data, simply paste it in the Data/Raw folder. 
+Should be a 1 liner to convert it to the format. 
+
+The format was chosen such that the 6th dimension will always be there, keeping a constant format without disappearing end dimensions form auto-squeeze .
+Unfortunately, we have made it the detectors, so if doing non-EMI experiments, this will give you some bugs. 
+Perhaps i will make it the 

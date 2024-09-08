@@ -1,0 +1,6 @@
+Libraries - external folders containing functionality
+Plotting - functions for producing output
+FileProcessing - functions that convert the raw into processed data
+General - general callable functions, like algorithms
+Helpers - functions only called within, not called from scripts 
+Misc - not sure, ideally nothing

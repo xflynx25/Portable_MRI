@@ -1,19 +1,19 @@
-# Ignore node_modules directory
+# Standard Ignores
 node_modules/
-
-# Ignore log files
 *.log
 my_log.txt
-
-# Ignore .env files
 .env
+.DS_Store
 
-# Ignore other repos
-Projects/editor_tf_fits/Data/Raw/EDITER_LowfieldMRI/
-Common/Helpers/matlab_basic_functions/
-to_be_organized/
-Common/Helpers/wavelet-coherence-master/
-Projects/bm4d/
+# Ignore other's repos
+Common/Helpers/clarissa_matlab_basic_functions/
+Common/Libraries/**
 
 # Ignore data files (large)
-Projects/*/Data/
+Data/**
+# temporary continue to ignore the projects data
+Projects/*/Data
+
+# Ignore the junk drawer
+to_be_organized/
+

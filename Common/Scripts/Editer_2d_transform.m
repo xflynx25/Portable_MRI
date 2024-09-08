@@ -180,6 +180,8 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
         is_plotting = varargin{1};
         if length(varargin) >= 2
             daspect = varargin{2};
+        else
+            daspect = -1; 
         end
         if is_plotting
             disp('Plotting results...');
@@ -199,13 +201,15 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
             %plot_editer_advanced(uncorrected_img, corrected_img, 8, x_range, y_range, daspect)
             % 5. we can plot the kspace too
             %plot_editer_advanced(uncorrected_ksp, corrected_ksp, 0, x_range, y_range, daspect)
-            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 2, x_range, y_range, daspect)
+            %plot_editer_advanced(uncorrected_ksp, corrected_ksp, 2, x_range, y_range, daspect)
             %plot_editer_advanced(uncorrected_ksp, corrected_ksp, 8, x_range, y_range, daspect)
 
 
             % custom choosing which
-            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 2, x_range, y_range, daspect)
-            plot_editer_advanced(uncorrected_img, corrected_img, 2, x_range, y_range, daspect)
+            fprintf('- Kspace - ')
+            plot_editer_advanced(uncorrected_ksp, corrected_ksp, 0)
+            fprintf('- Image - ')
+            plot_editer_advanced(uncorrected_img, corrected_img, 1)
         end
     end
 

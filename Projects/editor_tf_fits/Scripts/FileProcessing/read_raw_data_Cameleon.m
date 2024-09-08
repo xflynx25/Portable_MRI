@@ -1,34 +1,40 @@
 clear; close all;
 
 projectdatafolder = './Projects/editor_tf_fits/Data';
-expno = 8598; %8598;
+%projectdatafolder = './Projects/08242024/8673';
+expno = 8699; %8598;
 
 
 expostring = num2str(expno);
 data_path = fullfile(projectdatafolder, 'Raw/jerryComputer/EDITER', expostring);
+data_path = fullfile(projectdatafolder, 'Raw/jerryComputer/EDITER/08242024', expostring);
 ending = strcat(expostring, '.mat');
 outpath = fullfile(projectdatafolder, 'Processed/Cameleon', ending);
 
 %----------------------
 %-- Parameters
 %----------------------
-matrix1d     = 256; %  MATRIX_DIMENSION_1D
-matrix2d     = 256; % MATRIX_DIMENSION_2D
+matrix1d     = 128; %  MATRIX_DIMENSION_1D
+matrix2d     = 128; % MATRIX_DIMENSION_2D
 matrix3d     = 1; % MATRIX_DIMENSION_3D
 matrix4d     = 1; % MATRIX_DIMENSION_4D
 ncoils  = 4; % RECEIVER_COUNT 
 PRIMARY_COIL_NUMBER = 2; 
-PLOT_PRIMARY = false; 
+PLOT_PRIMARY = true; 
 % if we are looping from autotrials, we could infer either matrix1d or
 % ncoils depending on what is being kept constant
 
 %----------------------
 %-- Read Data
 %----------------------
-dataFile = [data_path '/data.dat'];        
+dataFile = [data_path '/data.dat'];    
+
+dataFile
    
 file = fopen(dataFile);
-data = fread(file, 'float32','b');  
+data = fread(file, 'float32','b'); 
+size(data)
+128 * 128 * 4
 fclose(file);
 
 % Automatically calculate the number of coils
@@ -109,9 +115,11 @@ if PLOT_PRIMARY
     ylabel('k_y (Hz)','fontsize', 14)
     title('ksp');
     
+    
     img = transpose(fftshift(fft2(ksp_plot))); % transpose forces freq to be x axis
     
     figure('name','img'); pcolor(x_dim,y_dim,abs(img)), shading interp; colormap(gray); 
+
     xlabel('x (mm)','fontsize', 14)
     ylabel('y (mm)','fontsize', 14)
     title('img');

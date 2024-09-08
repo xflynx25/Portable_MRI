@@ -4,6 +4,7 @@ function plot_editer_advanced(uncorrected, corrected, scale_param, varargin)
     % Determine the available range
     x_size = size(uncorrected, 1);
     y_size = size(uncorrected, 2);
+    daspect_ratio = x_size / y_size;
     
     % Default ranges
     x_range = 1:x_size;
@@ -80,7 +81,9 @@ function plot_editer_advanced(uncorrected, corrected, scale_param, varargin)
     diff_img = abs(uncorrected(x_range, y_range)) - abs(corrected(x_range, y_range));
     plot_with_scale_local(diff_img, 'Difference Image', ' Difference' ,scale_param, daspect_ratio);
 
-    % Calculate the RMS error
+    % Calculate the RMS error, how much error if you don't correct for EMI
     erms = rms(abs(uncorrected(:) - corrected(:)));
-    fprintf('RMS Error: %.4f\n', erms);
+    fprintf('RMS Error (EMI Correction): %.4f\n', erms);
+    normalized_erms = rms(abs(uncorrected(:) - corrected(:)) / rms(abs(corrected(:))));
+    fprintf('Normalized RMS Error (EMI Correction): %.4f\n', normalized_erms);
 end

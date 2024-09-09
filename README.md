@@ -16,7 +16,14 @@ The format was chosen such that the 6th dimension will always be there, keeping 
 Unfortunately, we have made it the detectors, so if doing non-EMI experiments, this will give you some bugs. 
 Perhaps i will make it the readout direction if i feel so inclined, but i doubt it as this reverses things a bit. 
 
-
+The spec dimensions
+1 = Readout
+2 = Phase encodes (misleadingly labeled fe rn)
+3 = Echoes (automatically bumped to 2 for 3d imaging procedures, just repeated)
+4 = calibrations or averages, these are repeats of same echo train before moving to next
+5 = repeats, these are repeats of the whole experiment after completion
+6 = Nc, number of coils 
+(and the primary is going to be in position one)
 
 NOTES:
 1. if you switch too many times, and have named files the same things in diff experiments,

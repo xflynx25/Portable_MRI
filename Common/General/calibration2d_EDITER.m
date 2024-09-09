@@ -1,8 +1,6 @@
 % needs to take in a dimension 3 which has the calibration first then the
 % editer 
 function [corrected_img, corrected_ksp] = calibration2d_EDITER(combined_data, editer_options)
-    disp('in calibration2d')
-    size(combined_data)
     calibration = squeeze(combined_data(:, :, 1, :));
     mr_acquisition = squeeze(combined_data(:, :, 2, :));
 

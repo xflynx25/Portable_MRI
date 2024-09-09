@@ -49,7 +49,7 @@ correlation_eps = 5e-2;
 dim5 = 2;
 emi_func = @(x) devediter_full(x, 1, correlation_eps, 3,0,1,0);
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, dim5, :), emi_func, raw_func, false);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, dim5, :), emi_func, raw_func, true);
 
 
 
@@ -64,7 +64,7 @@ f = @(x) Editer_2d_transform(x);
 emi_func = @(x) apply_and_average(f, x, 3); 
 fIDENTITY = @(x) shiftyifft(x); 
 raw_func = @(x) apply_and_average(fIDENTITY, x, 3); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pdavg, emi_func, raw_func);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdavg, emi_func, raw_func);
 
 
 
@@ -109,7 +109,7 @@ editer_options = struct(...
     'ksz_lin_final', 0);
 emi_func = @(x) calibration2d_EDITER(x, editer_options);
 raw_func = @(x) shiftyifft(x(:, :, 2)); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pdavg, emi_func, raw_func);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdavg, emi_func, raw_func);
 
 
 
@@ -145,11 +145,32 @@ avg_raw2 = total_raw2 / N;
 avg_img2 = total_img2 / N;
 
 % Call major_metrics on the averaged results
-[SNR, intraRMS, interRMS] = major_metrics(avg_raw1, avg_img1, avg_raw2, avg_img2, true);
+%[SNR, intraRMS, interRMS] = major_metrics(avg_raw1, avg_img1, avg_raw2, avg_img2, true);
+
+
 
 
 
 % Calib classical 
+
+original_options = struct(...
+    'W', 3);
+
+avy = slice_dimension(pd, [1,2], 5); 
+avy = slice_dimension(avy, [1,2], 6); 
+combined_data = squeeze(avy(:, :, 1, 1, :, :)); 
+[corrected_img, corrected_ksp] = calibration2d_ORIGINAL(combined_data, original_options);
+plot_editer_advanced(primary_img, corrected_img, 0);
+%plot_editer_advanced(primary_ksp, corrected_ksp, 0);
+
+%plotCoilDataView2D(squeeze(pd(:, :, 1, 1, 2, :)), 0, 0);
+%plotCoilDataView2D(squeeze(pd(:, :, 1, 1, 1, :)), 0, 0);
+
+
+emi_func = @(x) calibration2d_ORIGINAL(x, original_options);
+raw_func = @(x) shiftyifft(x(:, :, 2)); 
+[SNR, intraRMS, interRMS] = repeat_evaluation(avy, emi_func, raw_func);
+
 
 
 % Calib classical multi-line

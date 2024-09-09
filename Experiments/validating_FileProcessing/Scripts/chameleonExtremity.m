@@ -1,9 +1,10 @@
 % CALLING chameleon PROCESSING, SPECIFY FOLDER, EXP NAME, AND ACQ PARAMS 
 
+close all; 
 
 % select an option here 
-data_folder = 'ExtremityScanner/20240824'; 
-experimentName = '8699';
+data_folder = 'ExtremityScanner/20240503'; 
+experimentName = '8642';
 
 % Parameters
 PRINT_FOLDER_CONTENTS = 0;
@@ -13,7 +14,7 @@ Nfe = 128; %number of echo train sequences, this # + 1 should be divisible into 
 
 options.visualize = 1;
 %options.SLICE = 2;  % Overriding just the SLICE value
-options.IMAGE_SCALE = 0;  % Custom image scale
+options.IMAGE_SCALE = 1;  % Custom image scale
 options.KSPACE_SCALE = 0; 
 
 

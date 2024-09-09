@@ -4,6 +4,7 @@ node_modules/
 my_log.txt
 .env
 .DS_Store
+*.asv
 
 # Ignore other's repos
 Common/Helpers/clarissa_matlab_basic_functions/

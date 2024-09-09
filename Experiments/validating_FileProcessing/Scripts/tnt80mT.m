@@ -26,8 +26,8 @@ exp_name2 = 'acquire_3d_twoandtwo_calibration_maxxx';
 
 
 % select an option here 
-data_folder = '80mT_Scanner/20240823'; 
-experimentName = 'initial_scan_brain3';
+data_folder = '80mT_Scanner/20240807'; 
+experimentName = 'calibration_doubleacq_trial1';
 
 
 % Parameters
@@ -37,15 +37,16 @@ Necho = 1; % Number of echoes per coil
 Nro = 260; % Number of readout points 
 Nbuffer = 4;
 Navg = 1; %repetitions in 2D, adjacent in time
-Ncalib = 1; 
+Ncalib = 2; 
 N2d = Navg * Ncalib;
 Nfe = 40; %number of echo train sequences, this # + 1 should be divisible into the last index
-Nrepeats = 1; % repetitions in 4d, of whole experiment
+Nrepeats = 2; % repetitions in 4d, of whole experiment
 
 options.visualize = 1;
 %options.SLICE = 2;  % Overriding just the SLICE value
-options.IMAGE_SCALE = 3;  % Custom image scale
+options.IMAGE_SCALE = 2;  % Custom image scale
 options.KSPACE_SCALE = 1; 
+options.CALIBRATION = 0; 
 
 
 

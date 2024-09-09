@@ -38,5 +38,5 @@ function [win_stack] = devediter_correlationstage(combined_data, starter_kern_st
     
     % Drop the empty last entry 
     win_stack = win_stack(1:cwin - 1);
-    disp(win_stack)
+    %disp(win_stack)
 end 

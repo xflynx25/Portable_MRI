@@ -6,10 +6,10 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
     % expect data in this format: x by y by n_detectors
 
     %%%%% user setup   
-    ksz_col_EARLY = 0;%3; % Deltakx = 1
-    ksz_lin_EARLY = 0;%3; % Deltaky = 1
+    ksz_col_EARLY = 0; %3; % Deltakx = 1
+    ksz_lin_EARLY = 0; %3; % Deltaky = 1
     ksz_col_LATE = 7; 
-    ksz_lin_LATE = 1;%0; 
+    ksz_lin_LATE = 0; 
     CORRELATION_EPS = 0 + 5e-1;
     CORRELATION_EPS = 5e-1;%5e-1;
 

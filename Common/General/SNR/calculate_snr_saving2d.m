@@ -1,9 +1,11 @@
-function calculate_snr_saving2d(coil_data, use_saved_coords)
-    coords_filename = '/Users/jflyn/Documents/martinos_docs_windows/Projects/editor_tf_fits/Scripts/Other/snr_coords.mat';
+function [SNR] = calculate_snr_saving2d(coil_data, use_saved_coords)
+
+    rootDir = evalin('base', 'rootDir');
+    coords_filename = fullfile(rootDir, 'Common/General/SNR/snr_coords.mat');
 
     % Perform FFT for visuals and selection
-    I3Dfid = ifftshift(ifft2(ifftshift((coil_data)))); 
-    I = abs(I3Dfid);
+    %I3Dfid = ifftshift(ifft2(ifftshift((coil_data)))); 
+    I = abs(coil_data);%abs(I3Dfid);
 
 
     % Load saved coordinates if needed

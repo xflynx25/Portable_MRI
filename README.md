@@ -20,8 +20,8 @@ The spec dimensions
 1 = Readout
 2 = Phase encodes (misleadingly labeled fe rn)
 3 = Echoes (automatically bumped to 2 for 3d imaging procedures, just repeated)
-4 = calibrations or averages, these are repeats of same echo train before moving to next
-5 = repeats, these are repeats of the whole experiment after completion
+4 = repeats, these are repeats of the whole experiment after completion
+5 = calibrations or averages, these are repeats of same echo train before moving to next
 6 = Nc, number of coils 
 (and the primary is going to be in position one)
 

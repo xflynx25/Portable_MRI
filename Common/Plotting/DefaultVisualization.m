@@ -11,8 +11,12 @@ function DefaultVisualization(processed_data, options)
         'KSPACE_SCALE', 1, ...
         'CALIBRATION', 0);
 
-    % Merge default options with passed options
-    options = setstructfields(defaultOptions, options);
+    if nargin < 2 || isempty(options)
+        options = defaultOptions;
+    else
+        % Merge the passed options with the default options
+        options = setstructfields(defaultOptions, options);
+    end
 
     % Visualizations for sanity check and debugging
     if options.visualize == 1
@@ -56,16 +60,6 @@ function DefaultVisualization(processed_data, options)
         set(gcf, 'Name', 'EDITER Image Space', 'NumberTitle', 'off');
 
         % Coil View
-        figure;
-        set(gcf, 'Name', '4 Coil View', 'NumberTitle', 'off');
-        for i = 1:num_coils
-            subplot(2, num_coils, i);
-            imgspace = ifftshift(ifft2(ifftshift(cd(:, :, i))));
-            plot_with_scale(abs(imgspace), sprintf('Image coil%d', i), true, IMAGE_SCALE);
-        end
-        for i = 1:num_coils
-            subplot(2, num_coils, 4 + i);
-            plot_with_scale(abs(cd(:, :, i)), sprintf('ksp coil%d', i), true, KSPACE_SCALE);
-        end
+        plotCoilDataView2D(cd, IMAGE_SCALE, KSPACE_SCALE)
     end
 end

@@ -210,6 +210,8 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
             plot_editer_advanced(uncorrected_ksp, corrected_ksp, 0)
             fprintf('- Image - ')
             plot_editer_advanced(uncorrected_img, corrected_img, 1)
+            %calculate_snr_saving2d(uncorrected_img, true);
+            %calculate_snr_saving2d(corrected_img, true);
         end
     end
 

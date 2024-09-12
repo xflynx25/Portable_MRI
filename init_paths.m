@@ -40,10 +40,12 @@ function init_paths(expName)
     resultsDir = fullfile(expDir, 'Results');
     rawDataDir = fullfile(rootDir, 'Data', 'Raw');
     procDataDir = fullfile(rootDir, 'Data', 'Processed');
+    customDataDir = fullfile(rootDir, 'Data', 'CustomDatasets');
 
     assignin('base', 'resultsDir', resultsDir);
     assignin('base', 'rawDataDir', rawDataDir);
     assignin('base', 'procDataDir', procDataDir);
+    assignin('base', 'customDataDir', customDataDir);
 
 
     % Save the path for the current session

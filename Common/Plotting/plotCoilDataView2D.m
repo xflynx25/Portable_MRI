@@ -15,11 +15,16 @@ function plotCoilDataView2D(cd, IMAGE_SCALE, KSPACE_SCALE)
         subplot(2, num_coils, i);
         imgspace = ifftshift(ifft2(ifftshift(cd(:, :, i))));
         plot_with_scale(abs(imgspace), sprintf('Image coil%d', i), true, IMAGE_SCALE);
+
+        %set(gca, 'XTick', [], 'YTick', [], 'XTickLabel', [], 'YTickLabel', []);
+
     end
     
     % Plot k-space for each coil
     for i = 1:num_coils
         subplot(2, num_coils, num_coils + i);
         plot_with_scale(abs(cd(:, :, i)), sprintf('ksp coil%d', i), true, KSPACE_SCALE);
+        %set(gca, 'XTick', [], 'YTick', [], 'XTickLabel', [], 'YTickLabel', []);
+
     end
 end

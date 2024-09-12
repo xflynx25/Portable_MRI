@@ -49,7 +49,7 @@ correlation_eps = 5e-2;
 dim5 = 2;
 emi_func = @(x) devediter_full(x, 1, correlation_eps, 3,0,1,0);
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, dim5, :), emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, dim5, :), emi_func, raw_func, false);
 
 
 
@@ -154,10 +154,10 @@ avg_img2 = total_img2 / N;
 % Calib classical 
 
 original_options = struct(...
-    'W', 3);
+    'W', 40);
 
 avy = slice_dimension(pd, [1,2], 5); 
-avy = slice_dimension(avy, [1,2], 6); 
+avy = slice_dimension(avy, [1,3], 6); 
 combined_data = squeeze(avy(:, :, 1, 1, :, :)); 
 [corrected_img, corrected_ksp] = calibration2d_ORIGINAL(combined_data, original_options);
 plot_editer_advanced(primary_img, corrected_img, 0);

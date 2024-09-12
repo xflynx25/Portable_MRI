@@ -1,5 +1,6 @@
 % scale_param serves as caxis cutoff param if 0-1
 function plot_with_scale(data, title_text, square_plot, scale_param, daspect_ratio)
+    
     colormap gray; 
     plotdata = data; 
     if scale_param ~= 0 
@@ -14,6 +15,7 @@ function plot_with_scale(data, title_text, square_plot, scale_param, daspect_rat
         end
     end 
     imagesc((plotdata)); % you can rotate it here
+    colorbar; 
 
     if square_plot
 

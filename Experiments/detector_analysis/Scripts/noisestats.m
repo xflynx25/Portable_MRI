@@ -72,9 +72,9 @@ end
 set(gcf, 'Position', [100, 100, 1200, 800]);  % Adjust figure size
 
 
-%plot_matrix_histogram(abs(cd1), num_bins, true);
-%plot_matrix_histogram(abs(cd2), num_bins, true);
-%plot_matrix_histogram(abs(cd4), num_bins, true);
+%plot_matrix_histogram(real(cd1), num_bins, true);
+%plot_matrix_histogram(real(cd2), num_bins, true);
+%plot_matrix_histogram(real(cd4), num_bins, true);
 %plot_matrix_histogram(abs(shiftyifft(cd1)), num_bins,true);
 %plot_matrix_histogram(abs(shiftyifft(cd2)), num_bins,true);
 %plot_matrix_histogram(abs(shiftyifft(cd4)), num_bins, true);

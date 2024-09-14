@@ -1,12 +1,14 @@
 
 
 % select an option here 
-data_folder = 'falconDatasetDemos'; 
+data_folder = '80mT_Scanner/20240807'; 
 experimentName = '8716_FORMATTED';
 
 
-if false
+if true
     ListFilesInFolder(fullfile(evalin('base', 'customDataDir'), data_folder))
+    ListFilesInFolder(fullfile(evalin('base', 'procDataDir'), data_folder))
+    
     error('get rekked');
 end
 

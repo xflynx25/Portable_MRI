@@ -13,20 +13,21 @@
 
 % loading
 close all; %plots
-data_folder = '80mT_Scanner/20240807'; 
-experimentName = 'calibration_doubleacq_4avgs_FORMATTED';
+data_folder = '80mT_Scanner/20240823'; 
+experimentName = 'initial_scan_brain3_FORMATTED';
 procDataDir = evalin('base', 'procDataDir');
-pd = load(fullfile(procDataDir, data_folder, experimentName)).datafft_combined; %processed data
+pd = load(fullfile(procDataDir, data_folder, [experimentName, '.mat'])).datafft_combined; %processed data
 disp('loading ..., size')
 size(pd)
 
 % VARS
-IMAGE_SCALE = 1; 
+IMAGE_SCALE = 3; 
 KSPACE_SCALE = 0; 
 
 % references 
 disp('references')
-cd = squeeze(pd(:, :, 1, 1, 2, :));
+%cd = squeeze(pd(:, :, 1, 1, 2, :));
+cd = squeeze(pd(:, :, 1, 1, 1, :)); % when no calibration
 plotCoilDataView2D(cd, IMAGE_SCALE, KSPACE_SCALE)
 primary_ksp = cd(:, :, 1);
 primary_img = shiftyifft(primary_ksp);
@@ -36,7 +37,8 @@ primary_img = shiftyifft(primary_ksp);
 disp('EDITER classic, uses 2d');
 [EDITER_img, EDITER_ksp] = Editer_2d_transform(cd); 
 %plot_editer_advanced(primary_ksp, EDITER_ksp, KSPACE_SCALE);
-%plot_editer_advanced(primary_img, EDITER_img, IMAGE_SCALE);
+plot_editer_advanced(primary_img, EDITER_img, IMAGE_SCALE);
+throw('donezo for now')
 
 % EDITER john-implementation (check same)
 fprintf('\n\nEDITER john-implementation')

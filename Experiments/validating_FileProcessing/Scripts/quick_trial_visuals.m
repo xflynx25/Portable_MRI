@@ -1,13 +1,13 @@
 
 
 % select an option here 
-data_folder = '80mT_Scanner/20240807'; 
+data_folder = 'BroadSNRperformance'; 
 experimentName = '8716_FORMATTED';
 
 
 if true
     ListFilesInFolder(fullfile(evalin('base', 'customDataDir'), data_folder))
-    ListFilesInFolder(fullfile(evalin('base', 'procDataDir'), data_folder))
+    %ListFilesInFolder(fullfile(evalin('base', 'procDataDir'), data_folder))
     
     error('get rekked');
 end

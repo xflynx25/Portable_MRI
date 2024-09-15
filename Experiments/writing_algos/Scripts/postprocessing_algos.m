@@ -7,8 +7,8 @@
 
 
 % USER INPUT
-scan_selector = 2; 
-IMAGE_SCALE = 2; 
+scan_selector = 5; 
+IMAGE_SCALE = 12; 
 KSPACE_SCALE = 0; 
 
 
@@ -17,25 +17,30 @@ close all; %plots
 if scan_selector == 1 % SOOO NOISY brain
     data_folder = '80mT_Scanner/20240823'; 
     experimentName = 'brain_calibration_repeat2D_newgradON_trial1_FORMATTED';
-    procDataDir = evalin('base', 'procDataDir');
+    Datadir = evalin('base', 'procDataDir');
 end
 if scan_selector == 2 % cleaner brain
     data_folder = '80mT_Scanner/20240823'; 
     experimentName = 'brain_calibration_repeat2D_FORMATTED';
-    procDataDir = evalin('base', 'procDataDir');
+    Datadir = evalin('base', 'procDataDir');
 end
 if scan_selector == 3 % clean distorted ball
     data_folder = '80mT_Scanner/20240823'; 
     experimentName = 'initial_scan_ball7_FORMATTED';
-    procDataDir = evalin('base', 'procDataDir');
+    Datadir = evalin('base', 'procDataDir');
 end
 if scan_selector == 4 % clean decent ball
     data_folder = '80mT_Scanner/20240807'; 
     experimentName = 'calibration_doubleacq_2avgs_FORMATTED';
-    procDataDir = evalin('base', 'procDataDir');
+    Datadir = evalin('base', 'procDataDir');
+end
+if scan_selector == 5 % the broad snr dataset stuff
+    data_folder = 'BroadSNRperformance'; 
+    experimentName = '8642_FORMATTED';
+    Datadir = evalin('base', 'customDataDir');
 end
 
-pd = load(fullfile(procDataDir, data_folder, [experimentName, '.mat'])).datafft_combined; %processed data
+pd = load(fullfile(Datadir, data_folder, [experimentName, '.mat'])).datafft_combined; %processed data
 disp('loading ..., size')
 size(pd)
 
@@ -43,8 +48,10 @@ size(pd)
 % FORMATTING
 disp('references')
 if size(pd, 5) > 1
+    pdmrswoop = pd(:, :, :, :, 2, :);
     cd = squeeze(pd(:, :, 1, 1, 2, :));
 else
+    pdmrswoop = pd(:, :, :, :, 1, :);
     cd = squeeze(pd(:, :, 1, 1, 1, :)); % when no calibration
 end
 plotCoilDataView2D(cd, IMAGE_SCALE, KSPACE_SCALE)
@@ -91,19 +98,19 @@ fprintf('\n\nBM4D\n');
 
 emi_func = @(x) BM3D(abs(shiftyifft(x(:, :, 1))), sigma_est_solo, 'np');
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, 2, :), emi_func, raw_func, true);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 % editer
 fprintf('\n\nEDITER\n');
 emi_func = @(x) Editer_2d_transform(x);
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, 2, :), emi_func, raw_func, true);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 % combined
 fprintf('\n\nCOMBINED\n');
 emi_func = @(x) BM3D(abs(Editer_2d_transform(x)), sigma_est_editer, 'np');
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, 2, :), emi_func, raw_func, true);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 
 % Try with other algos
@@ -144,7 +151,7 @@ plotDenoisingMosaic(abs(primary_img), reconstruct_identity, denoise_func_lambda_
 fprintf('\n\nNLM\n');
 emi_func = @(x) imnlmfilt(abs(shiftyifft(x(:, :, 1))), 'DegreeOfSmoothing', .08);
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, 2, :), emi_func, raw_func, true);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 fprintf('\n\nTV\n');
 emi_func = @(x) imdiffusefilt(abs(shiftyifft(x(:, :, 1))), ...
@@ -152,4 +159,4 @@ emi_func = @(x) imdiffusefilt(abs(shiftyifft(x(:, :, 1))), ...
     'GradientThreshold', .055, ...
     'NumberOfIterations', 5); % Fixed number of iterations
 raw_func = @(x) shiftyifft(x); 
-[SNR, intraRMS, interRMS] = repeat_evaluation(pd(:, :, :, :, 2, :), emi_func, raw_func, true);
+%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);

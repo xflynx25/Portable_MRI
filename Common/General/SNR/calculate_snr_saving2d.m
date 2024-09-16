@@ -44,7 +44,7 @@ function [SNR] = calculate_snr_saving2d(coil_data, use_saved_coords)
 
     SNR = sig / noise;
     RSD = 100 / SNR; 
-    disp(['sig=', num2str(sig), ', noise=', num2str(noise), ', SNR=', num2str(SNR), ' RSD=', num2str(RSD), '%']);
+    %disp(['sig=', num2str(sig), ', noise=', num2str(noise), ', SNR=', num2str(SNR), ' RSD=', num2str(RSD), '%']);
 end
 
 function [signal_coords, noise_coords] = load_coords(filename)

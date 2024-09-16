@@ -5,8 +5,8 @@
 
 
 % USER INPUT
-scan_selector = 5; 
-IMAGE_SCALE = 1; 
+scan_selector = 1; 
+IMAGE_SCALE = 2; 
 KSPACE_SCALE = 0; 
 
 
@@ -37,9 +37,16 @@ if scan_selector == 5 % the broad snr dataset stuff
     experimentName = '8642_FORMATTED';
     Datadir = evalin('base', 'customDataDir');
 end
+if scan_selector == 6 % blanket dirty ball 
+    data_folder = 'BroadSNRperformance'; 
+    experimentName = 'with_blanket_newgradON_test1_FORMATTED';
+    Datadir = evalin('base', 'customDataDir');
+end
 pd = load(fullfile(Datadir, data_folder, [experimentName, '.mat'])).datafft_combined; %processed data
 disp('loading ..., size')
 size(pd)
+
+
 
 
 % FORMATTING
@@ -56,8 +63,10 @@ num_coils = size(pd, 6);
 
 
 % Define the range of ksz_col_initial and ksz_col_final
-ksz_col_initial_values = [0, 1, 2, 3, 4, 5];
-ksz_col_final_values = [0, 1, 2, 3, 4, 5, 7];
+ksz_col_initial_values = [0, 1, 3];
+ksz_col_final_values = [0, 1, 3];
+ksz_col_initial_values = [0, 3];
+ksz_col_final_values = [0, 3];
 num_values_i = length(ksz_col_initial_values);
 num_values_f = length(ksz_col_final_values);
 
@@ -71,30 +80,27 @@ correlation_eps = 3e-1;
 ksz_lin_final = 0; 
 MAX_KERNSTACK_TO_PLOT = 15; 
 num_emi_coils = num_coils - 1;
-mingroupingsize = 4; 
+mingroupingsize = 0; 
 
 % Save the current directory
 cd_copy = cd; 
+
+% allow to select the region by setting this to false
+SNR = calculate_snr_saving2d(primary_img, true);
 
 % Loop through all combinations of ksz_col_initial and ksz_col_final
 for i = 1:num_values_i
     for j = 1:num_values_f
         ksz_col_initial = ksz_col_initial_values(i);
         ksz_col_final = ksz_col_final_values(j);
-        
-        % Perform the processing steps
-        starter_kern_stack = devediter_initialfits(cd_copy, W, ksz_col_initial, ksz_lin_initial);
-        win_stack = devediter_alternative_correlationstage(cd_copy, starter_kern_stack, correlation_eps, mingroupingsize);
-        
-        % useful display but slows down the grid search
-        %disp('Formed Groups:');
-        %for group = 1:length(win_stack)
-        %    fprintf('Group %d: %s\n', group, mat2str(win_stack{group}));
-        %end
-        
-        [kern_stack, win_stack, ksz_col, ksz_lin] = devediter_finalkernels(cd_copy, win_stack, ksz_col_final, ksz_lin_final);
-        [corrected_img_dev, corrected_ksp_dev] = devediter_inference(cd_copy, kern_stack, win_stack, ksz_col, ksz_lin);
-        
+
+        %[corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned(cd_copy, W, ksz_col_initial, ksz_lin_initial, ...
+    %ksz_col_final, ksz_lin_final, 15, 100, 3);
+
+        [corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned_simplified(cd_copy, W, ksz_col_initial, ksz_lin_initial, ...
+    ksz_col_final, ksz_lin_final, mingroupingsize);
+
+
         % Calculate SNR
         SNR = calculate_snr_saving2d(corrected_img_dev, true);
         %throw('j')
@@ -105,6 +111,8 @@ for i = 1:num_values_i
         % Optionally display progress
         fprintf('SNR for ksz_col_initial = %d and ksz_col_final = %d: %.2f\n', ...
                 ksz_col_initial, ksz_col_final, SNR);
+        % plot this guy
+        plot_editer_advanced_equalcolors(primary_img, corrected_img_dev, IMAGE_SCALE);
     end
 end
 % -------------------------------------------

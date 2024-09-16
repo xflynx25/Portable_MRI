@@ -1,5 +1,5 @@
 % scale_param serves as caxis cutoff param if 0-1
-function plot_with_scale(data, title_text, square_plot, scale_param, daspect_ratio)
+function maxval = plot_with_scale(data, title_text, square_plot, scale_param)
     
     colormap gray; 
     plotdata = data; 
@@ -27,4 +27,6 @@ function plot_with_scale(data, title_text, square_plot, scale_param, daspect_rat
     %axis image; 
     %daspect([1 1 1] ./ [4 1 1]);  
     title(title_text);
+
+    maxval = max(max(plotdata));
 end

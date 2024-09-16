@@ -5,6 +5,7 @@ my_log.txt
 .env
 .DS_Store
 *.asv
+*.png
 
 # Ignore other's repos
 Common/Helpers/clarissa_matlab_basic_functions/
@@ -14,7 +15,8 @@ Common/Libraries/**
 Data/**
 # temporary continue to ignore the projects data
 Projects/*/Data
+**/Results/
 
 # Ignore the junk drawer
 to_be_organized/
-
+kern_stack_plots/

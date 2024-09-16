@@ -119,9 +119,9 @@ function [win_stack] = devediter_alternative_correlationstage(combined_data, sta
     end
     win_stack = win_stack(1:cwin - 1);
     %disp(win_stack)
-    disp('win stack displayed');
+    %disp('win stack displayed');
 
     % --- Visualization of Correlation Matrix with Group Boundaries ---
-    visualize_correlation_matrix(abs(kcor), win_stack, correlation_eps);
+    %visualize_correlation_matrix(abs(kcor), win_stack, correlation_eps);
     % --- End of Visualization ---
 end

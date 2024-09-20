@@ -63,10 +63,17 @@ num_coils = size(pd, 6);
 
 
 % Define the range of ksz_col_initial and ksz_col_final
-ksz_col_initial_values = [0, 1, 3];
-ksz_col_final_values = [0, 1, 3];
-ksz_col_initial_values = [0, 3];
-ksz_col_final_values = [0, 3];
+ksz_col_initial_values = [1, 3, 5, 7];
+ksz_col_final_values = [1, 3, 5, 7];
+ksz_col_initial_values = [0, 1, 3, 5];
+ksz_col_final_values = [0, 1, 3, 5];
+ksz_col_initial_values = [0, 1, 2, 4];
+ksz_col_final_values = [0, 1, 2, 4];
+
+ksz_col_initial_values = [1];
+ksz_col_final_values = [1];
+%ksz_col_initial_values = [0, 3];
+%ksz_col_final_values = [0, 3];
 num_values_i = length(ksz_col_initial_values);
 num_values_f = length(ksz_col_final_values);
 
@@ -76,17 +83,18 @@ SNR_matrix = zeros(num_values_i, num_values_f);
 % Other parameters
 W = 1; % number of PE per initial window
 ksz_lin_initial = 0; 
+ksz_lin_final = 1; 
 correlation_eps = 3e-1; 
-ksz_lin_final = 0; 
 MAX_KERNSTACK_TO_PLOT = 15; 
 num_emi_coils = num_coils - 1;
-mingroupingsize = 0; 
+mingroupingsize = 0; % 0 means use the line method
+max_groupings = 10; 
 
 % Save the current directory
 cd_copy = cd; 
 
 % allow to select the region by setting this to false
-SNR = calculate_snr_saving2d(primary_img, true);
+SNR = calculate_snr_saving2d(primary_img, false);
 
 % Loop through all combinations of ksz_col_initial and ksz_col_final
 for i = 1:num_values_i
@@ -97,13 +105,27 @@ for i = 1:num_values_i
         %[corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned(cd_copy, W, ksz_col_initial, ksz_lin_initial, ...
     %ksz_col_final, ksz_lin_final, 15, 100, 3);
 
-        [corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned_simplified(cd_copy, W, ksz_col_initial, ksz_lin_initial, ...
-    ksz_col_final, ksz_lin_final, mingroupingsize);
+        % for kx 
+ %       [corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned_simplified(cd_copy, W, ksz_col_initial, ksz_lin_initial, ...
+ %   ksz_col_final, ksz_lin_final, mingroupingsize, max_groupings);
 
+        % for ky
+ %       [corrected_img_dev, corrected_ksp_dev] = devediter_full_autotuned_simplified(cd_copy, W, ksz_lin_initial, ksz_col_initial, ...
+ %   ksz_lin_final, ksz_col_final, mingroupingsize, max_groupings);
 
         % Calculate SNR
-        SNR = calculate_snr_saving2d(corrected_img_dev, true);
+        %SNR = calculate_snr_saving2d(corrected_img_dev, true);
+
         %throw('j')
+        % for MSE, SNR just a stand in for consistency with rest, this
+        % script is getting  abit overloaded yeah ik
+        [corrected_img_dev, corrected_ksp_dev, SNR] = devediter_full_autotuned_MSE(pd(:, :, :, :, 2, :), W, ksz_col_initial, ksz_lin_initial, ...
+    ksz_col_final, ksz_lin_final, mingroupingsize, max_groupings);
+
+        % and MSE for ky
+ %       [corrected_img_dev, corrected_ksp_dev, SNR] = devediter_full_autotuned_MSE(pd(:, :, :, :, 2, :), W, ksz_lin_initial, ksz_col_initial, ...
+ %   ksz_lin_final, ksz_col_final, mingroupingsize, max_groupings);
+
         
         % Store the SNR in the matrix
         SNR_matrix(i, j) = SNR;
@@ -112,7 +134,7 @@ for i = 1:num_values_i
         fprintf('SNR for ksz_col_initial = %d and ksz_col_final = %d: %.2f\n', ...
                 ksz_col_initial, ksz_col_final, SNR);
         % plot this guy
-        plot_editer_advanced_equalcolors(primary_img, corrected_img_dev, IMAGE_SCALE);
+        %plot_editer_advanced_equalcolors(primary_img, corrected_img_dev, IMAGE_SCALE);
     end
 end
 % -------------------------------------------
@@ -134,7 +156,7 @@ c.Label.String = 'SNR'; % Set the colorbar title
 % Set axis labels and title
 xlabel('Final ksz\_col', 'FontSize', 12);
 ylabel('Initial ksz\_col', 'FontSize', 12);
-title('SNR Results for Different ksz\_col Initial and Final Values', 'FontSize', 14, 'FontWeight', 'bold');
+title('MSE Multiplier (noisy brain) ky=(0,1), varying kx', 'FontSize', 14, 'FontWeight', 'bold');
 
 % Set axis ticks to correspond to the indices
 set(gca, 'XTick', 1:num_values_i, 'YTick', 1:num_values_f);
@@ -169,7 +191,7 @@ for i = 1:num_values_i
             textColor = 'k'; % Black text for lighter backgrounds
         end
         
-        text(j, i, sprintf('%.2f', SNR_matrix(i,j)), ...
+        text(j, i, sprintf('%.3f', SNR_matrix(i,j)), ...
              'HorizontalAlignment', 'center', ...
              'VerticalAlignment', 'middle', ...
              'Color', textColor, ...

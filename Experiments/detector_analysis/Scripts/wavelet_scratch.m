@@ -1,16 +1,31 @@
 
-projectdata = './Projects/editor_tf_fits/Data';
-exp_name = '2Dsequence_2Dtable_calibration_singleecho_trigearly_4rx_1repeat_260_gain60_ball_5th_trial2'; 
-%exp_name = 'builtin_averages';
-outpath = fullfile(projectdata, 'Processed/tnt',['tnt_preprocessed_data_', exp_name, '_FORMATTED.mat']);
+% USER INPUT
+scan_selector = 4; 
+IMAGE_SCALE = 2; 
+KSPACE_SCALE = 0; 
+
+
+% LOADING, PREPARATION
+close all; %plots
+pd = read_in_common_dataset(scan_selector); 
+
+
+
+% FORMATTING
+disp('references')
+if size(pd, 5) > 1
+    cd = squeeze(pd(:, :, 1, 1, 2, :));
+else
+    cd = squeeze(pd(:, :, 1, 1, 1, :)); % when no calibration
+end
+plotCoilDataView2D(cd, IMAGE_SCALE, KSPACE_SCALE)
+primary_ksp = cd(:, :, 1);
+primary_img = shiftyifft(primary_ksp);
+num_coils = size(pd, 6); 
+
 
 SLICE_2 = 20; 
-SLICE_3 = 1; 
-
-cd = load(outpath);
-coil_data = cd.datafft_combined; 
-mr_sequence = coil_data(:, :, :, :, 2); 
-mr_plane = squeeze(mr_sequence(:, SLICE_2, SLICE_3, :)); 
+mr_plane = squeeze(cd(:, SLICE_2, :)); 
 
 NUM_DETECTORS = 4;
 size(mr_plane)

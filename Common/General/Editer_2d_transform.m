@@ -99,7 +99,7 @@ function [corrected_img, corrected_ksp] = Editer_2d_transform(combined_data, var
    
     
     %% Visualization: Heatmap of the correlation matrix with highlights
-    VIS = 0;
+    VIS = 1;
     if VIS == 1
         disp(win_stack)
 

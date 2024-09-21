@@ -98,19 +98,19 @@ fprintf('\n\nBM4D\n');
 
 emi_func = @(x) BM3D(abs(shiftyifft(x(:, :, 1))), sigma_est_solo, 'np');
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 % editer
 fprintf('\n\nEDITER\n');
 emi_func = @(x) Editer_2d_transform(x);
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 % combined
 fprintf('\n\nCOMBINED\n');
 emi_func = @(x) BM3D(abs(Editer_2d_transform(x)), sigma_est_editer, 'np');
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 
 % Try with other algos
@@ -144,14 +144,16 @@ denoise_func_lambda_TV = @(param) @(x) imdiffusefilt(x, ...
 
 % Plot NLM Results
 plotDenoisingMosaic(abs(primary_img), reconstruct_identity, denoise_func_lambda_NLM, nlm_guesses, IMAGE_SCALE);
+sgtitle('NLM Denoising', 'FontSize', 16, 'FontWeight', 'bold');
 % Plot TV Results
 plotDenoisingMosaic(abs(primary_img), reconstruct_identity, denoise_func_lambda_TV, tv_guesses, IMAGE_SCALE);
+    sgtitle('TV Denoising', 'FontSize', 16, 'FontWeight', 'bold');
 
 % plot snrs
 fprintf('\n\nNLM\n');
 emi_func = @(x) imnlmfilt(abs(shiftyifft(x(:, :, 1))), 'DegreeOfSmoothing', .08);
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
 
 fprintf('\n\nTV\n');
 emi_func = @(x) imdiffusefilt(abs(shiftyifft(x(:, :, 1))), ...
@@ -159,4 +161,4 @@ emi_func = @(x) imdiffusefilt(abs(shiftyifft(x(:, :, 1))), ...
     'GradientThreshold', .055, ...
     'NumberOfIterations', 5); % Fixed number of iterations
 raw_func = @(x) shiftyifft(x); 
-%[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);
+[SNR, intraRMS, interRMS] = repeat_evaluation(pdmrswoop, emi_func, raw_func, true);

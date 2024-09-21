@@ -43,5 +43,5 @@ function [kern_stack, win_stack] = linebyline_training(calibration, original_opt
         % Move to the next window
         cwin = cwin + 1;
     end
-    kern_stack{1}
+    kern_stack{1};
 end

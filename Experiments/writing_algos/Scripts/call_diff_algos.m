@@ -162,8 +162,8 @@ avy = slice_dimension(pd, [1,2], 5);
 avy = slice_dimension(avy, [1,3], 6); 
 combined_data = squeeze(avy(:, :, 1, 1, :, :)); 
 [corrected_img, corrected_ksp] = calibration2d_ORIGINAL(combined_data, original_options);
-plot_editer_advanced(primary_img, corrected_img, 0);
-%plot_editer_advanced(primary_ksp, corrected_ksp, 0);
+plot_editer_advanced(primary_img, corrected_img, 0); 
+%plot_editer_advanced(primary_ksp, corrected_ksp, 0); 
 
 %plotCoilDataView2D(squeeze(pd(:, :, 1, 1, 2, :)), 0, 0);
 %plotCoilDataView2D(squeeze(pd(:, :, 1, 1, 1, :)), 0, 0);

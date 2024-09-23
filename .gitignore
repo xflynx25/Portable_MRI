@@ -8,7 +8,7 @@ my_log.txt
 *.png
 
 # Ignore other's repos
-Common/Helpers/clarissa_matlab_basic_functions/
+#Common/Helpers/clarissa_matlab_basic_functions/
 Common/Libraries/**
 
 # Ignore data files (large)

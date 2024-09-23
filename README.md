@@ -1,3 +1,13 @@
+# Overview
+Functional library and filesystem for mri processing. 
+
+# What is not included in the repository
+See the gitignore: public libraries need to be installed from the appropriate places available online
+- bm3d 4.0.2
+- wavelet-coherence-master
+
+And the data also does not exist. Available by request from me as a zip of size 750MB. 
+
 # Experiment Setup
 
 Designed to be simple to use and grow. 

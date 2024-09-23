@@ -1,0 +1,5 @@
+function [] = imgood(A)
+
+imagesc(A);  
+axis square;
+colormap jet;
